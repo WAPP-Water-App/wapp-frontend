@@ -1,0 +1,12 @@
+.navbar-container{
+    background: #72d3fe;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.navbar-container img{
+    height: 100px;
+    width: 100px;
+}

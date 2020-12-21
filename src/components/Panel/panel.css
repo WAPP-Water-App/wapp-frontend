@@ -1,0 +1,13 @@
+.panel-container {
+  display: block flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.panel-container div {
+ 
+  margin: 10px 0;
+  background: #bbeafe;
+  height: 30%;
+}

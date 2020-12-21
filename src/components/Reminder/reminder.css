@@ -1,0 +1,18 @@
+.btn {
+  padding: 2%;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  transition-duration: 1s;
+}
+
+.btn:focus {
+
+}
+.btn:hover {
+ 
+}
+
+.btn:disabled {
+  border: 5px solid red;
+}

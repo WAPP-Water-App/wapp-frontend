@@ -1,0 +1,44 @@
+.main-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1.7fr 0.3fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    'buttons display'
+    'text text';
+  height: 100%;
+  background-color: #00000010;
+}
+
+.text {
+  grid-area: text;
+  border: 1px solid black;
+}
+.buttons {
+  grid-area: buttons;
+  height: 100%;
+  border: 1px solid black;
+
+}
+.buttons ul {
+  display: flex;
+  flex-flow: column wrap;
+  overflow: auto;
+  height: 850px;
+
+}
+
+.buttons ul li{
+  flex-basis: fit-content;
+}
+.display {
+  grid-area: display;
+
+  /* mask-image: url("public/img/water-drop.png"); */
+
+  border: 1px solid black;
+}
+
+.buttons ul {
+  list-style-type: none;
+}

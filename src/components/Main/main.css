@@ -12,12 +12,14 @@
 
 .text {
   grid-area: text;
-  border: 1px solid black;
+  border: solid 5px #bbeafe;
+  border-radius: 5px;
 }
 .buttons {
   grid-area: buttons;
-  height: 100%;
-  border: 1px solid black;
+  height: 99%;
+  border: solid 5px #bbeafe;
+  border-radius: 5px;
 
 }
 .buttons ul {
@@ -36,7 +38,8 @@
 
   /* mask-image: url("public/img/water-drop.png"); */
 
-  border: 1px solid black;
+  border: solid 5px #bbeafe;
+  border-radius: 5px;
 }
 
 .buttons ul {

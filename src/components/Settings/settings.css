@@ -1,9 +1,27 @@
 label {
     display: block;
-
+    font-weight: bold;
 }
 
 input,
-label {
-    margin: .4rem 0;
+label, select, button {
+    margin: .4rem 0 0 .4rem;
+}
+
+input, select {
+    height: 25px;
+    width: 100px;
+    font-size: 20px;
+}
+
+span {
+    margin-left: 10px;
+}
+
+button .settings {
+    cursor: pointer;
+    height: 30px;
+    width: 200px;
+    font-size: 20px;
+    border-radius: 4px;
 }

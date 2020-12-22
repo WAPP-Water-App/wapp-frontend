@@ -19,7 +19,7 @@ export default function Settings() {
     times[num] = true;
     return times.map((time, index) => (
       <option value={index} selected={time}>
-        {index}
+        {`${index}:00`}
       </option>
     ));
   };
@@ -134,7 +134,7 @@ export default function Settings() {
           />
           <span>#{reminderNumber}</span>
         </div>
-        <button type="submit" onClick={handleSubmit}>Update Settings</button>
+        <button className="settings" type="submit" onClick={handleSubmit}>Update Settings</button>
       </form>
     </div>
   );

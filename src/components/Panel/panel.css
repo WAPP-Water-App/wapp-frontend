@@ -6,8 +6,16 @@
 }
 
 .panel-container div {
- 
-  margin: 10px 0;
-  background: #bbeafe;
-  height: 30%;
+  border: solid 5px #bbeafe;
+  border-radius: 5px;
+  margin: 0px;
+  height: 32%;
+}
+
+#panel-top {
+  margin-bottom: 9px;
+}
+
+#panel-bot {
+  margin-top: 9px;
 }

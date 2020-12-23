@@ -14,6 +14,7 @@ export default function Display({ progress }) {
       >
         <img src="/img/clear-water-drop.png" />
       </div>
+      <div>{progress}</div>
     </div>
   );
 }

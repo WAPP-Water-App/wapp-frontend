@@ -11,19 +11,16 @@ export default function Profile() {
     const getProfile = async () => {
       const response = await WAPPRequest('/profile', {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
       }).catch(() => {
         setError(true);
         return null;
       });
 
-      setLoading(false);
-
-      console.log(response);
-
       if (response) {
         setProfile(response);
       }
+
+      setLoading(false);
     };
 
     getProfile();

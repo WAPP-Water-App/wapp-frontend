@@ -1,7 +1,14 @@
 import React from 'react';
 import './reminder.css';
 
-export default function Reminder({ data, index, handleClick, disabled }) {
+export default function Reminder({
+  time,
+  amt,
+  percent,
+  index,
+  handleClick,
+  disabled,
+}) {
   // reminder component
   return (
     <>
@@ -10,16 +17,15 @@ export default function Reminder({ data, index, handleClick, disabled }) {
           disabled={disabled[index]}
           className="btn"
           onClick={() => handleClick(index)}
-          style={{ backgroundColor: `#98ddfc${data.percent}` }}
+          style={{ backgroundColor: `#98ddfc${percent}` }}
         >
-          <span>Time: {data.time}:00</span>
+          <span>Time: {time}:00</span>
           <br />
-          <span>Amount: {data.amt} Liter</span>
+          <span>Amount: {amt} fl oz</span>
         </button>
       </li>
     </>
   );
 }
-
 
 //TODO: enable buttons when time has passed

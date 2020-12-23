@@ -1,107 +1,176 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import WAPPRequest from '../../utils';
 import './settings.css';
 
 export default function Settings() {
+  const [age, setAge] = useState(0);
+  const [weight, setWeight] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
+  const [reminder, setReminder] = useState(0);
 
-  // settings component
-  // basically a form
-  //TODO: send data to api endpoint to create/update user data
-  
-  const [age, setAge] = useState();
-  const [weight, setWeight] = useState();
-  const [height, setHeight] = useState();
-  const [gender, setGender] = useState();
-  const [numReminders, setNumReminders] = useState();
+  // calls the user's settings from the database
+  // if none are set, then the default values are displayed
+  // else display their current settings
+
+  useEffect(() => {
+    const getUserSettings = async () => {
+      const response = await WAPPRequest('/profile/settings', {
+        method: 'GET',
+      }).catch((error) => console.log(error));
+
+      if (response) {
+        setAge(Object.keys(response).length ? response.settings.age : 25);
+        setWeight(Object.keys(response).length ? response.settings.weight : 150);
+        setHeight(
+          Object.keys(response).length ? response.settings.height : 65
+        );
+        setStartTime(
+          Object.keys(response).length ? response.settings.startTime : 9
+        );
+        setEndTime(
+          Object.keys(response).length ? response.settings.endTime : 22
+        );
+        setReminder(
+          Object.keys(response).length ? response.settings.reminder : 1
+        );
+      }
+    };
+
+    getUserSettings();
+  }, []);
+
+  const renderDropdown = (num) => {
+    const times = new Array(24).fill('');
+    times[num] = true;
+    return times.map((time, index) => (
+      <option value={index} selected={time}>
+        {`${index}:00`}
+      </option>
+    ));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const updatedSettings = {
+      age,
+      weight,
+      height,
+      startTime,
+      endTime,
+      reminder,
+    };
+
+    const response = await WAPPRequest('/profile/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedSettings),
+    });
+  };
 
   return (
-    <div>
-      <h1>SETTINGS GO HERE</h1>
+    <div className="settings-container">
+      <h1>SETTINGS</h1>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label for="age">Age</label>
+          <label for="age">
+            <div>Age</div>
+          </label>
           <input
             type="range"
             id="age"
             name="age"
             min="0"
             max="100"
+            value={age}
             onChange={(e) => setAge(parseInt(e.target.value))}
           />
-          <span>{age}</span>
+          <div>{age}</div>
         </div>
         <div className="form-group">
-        <label for="weight">Weight</label>
-        <button onClick={(e)=>setWeight(parseInt(weight)-1)}>+</button>
+          <label for="weight">
+            <div>Weight</div>
+          </label>
           <input
             type="number"
             id="weight"
-W           name="weight"
-W           min="0"
+            W
+            name="weight"
+            W
+            min="0"
             max="500"
+            value={weight}
             onChange={(e) => setWeight(parseInt(e.target.value))}
           />
-          <button onClick={(e)=>setWeight(parseInt(weight)+1)}>+</button>
-          <span>{weight} kg</span>
+          <div>{weight} lbs</div>
         </div>
         <div className="form-group">
-        <label for="height">Height</label>
-        <button onClick={(e)=>setHeight(parseInt(height)-1)}>+</button>
+          <label for="height">
+            <div>Height</div>
+          </label>
           <input
             type="number"
             id="height"
-W           name="height"
-W           min="0"
+            W
+            name="height"
+            W
+            min="0"
             max="500"
+            value={height}
             onChange={(e) => setHeight(parseInt(e.target.value))}
           />
-          <button onClick={(e)=>setWeight(parseInt(height)+1)}>+</button>
-          <span>{height} cm</span>
+          <div>{height} in</div>
         </div>
         <div className="form-group">
-        <label for="gender">Gender</label>
-          <button onClick={(e)=>setGender('M')}>Male</button>
-          <button onClick={(e)=>setGender('F')}>Female</button>
-          <button onClick={(e)=>setGender('O')}>Other</button>
-          <span>Selected Gender: {gender} </span>
-        </div>
-        <div className="form-group">
-          <label for="startTime">What time do you start your day:</label>
-          <input
-            type="time"
-            id="startTime"
+          <label for="startTime">
+            <div>What time do you start your day:</div>
+          </label>
+          <select
             name="startTime"
-            min="09:00"
-            max="18:00"
-            required
-          />
+            id="startTime"
+            onChange={(e) => setStartTime(parseInt(e.target.value))}
+          >
+            {renderDropdown(startTime)}
+          </select>
         </div>
         <div className="form-group">
-          <label for="endTime">What time do you end your day:</label>
-          <input
-            type="time"
-            id="endTime"
+          <label for="endTime">
+            <div>What time do you end your day:</div>
+          </label>
+          <select
             name="endTime"
-            min="09:00"
-            max="18:00"
-            required
-          />
+            id="endTime"
+            onChange={(e) => {
+              setEndTime(parseInt(e.target.value));
+            }}
+          >
+            {renderDropdown(endTime)}
+          </select>
         </div>
         <div className="form-group">
-          <label for="numReminders">How many reminders do you want a day?</label>
+          <label for="reminder">
+            <div> Notification Intensity</div>
+          </label>
           <input
             type="range"
-            id="numReminders"
-            name="numReminders"
+            id="reminder"
+            name="reminder"
             min="1"
-            max="10"
-            onChange={(e) => setNumReminders(parseInt(e.target.value))}
+            max="5"
+            value={reminder}
+            onChange={(e) => setReminder(parseInt(e.target.value))}
           />
-          <span>#{numReminders}</span>
+          <div>Every {reminder} Hours</div>
         </div>
       </form>
+      <button className="settings" type="submit" onClick={handleSubmit}>
+        Update Settings
+      </button>
     </div>
   );
 }
 
-//https://www.hydrationforhealth.com/en/hydration-tools/hydration-calculator/
+// TODO - refresh the page

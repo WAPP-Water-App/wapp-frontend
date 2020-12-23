@@ -1,9 +1,27 @@
-label {
-    display: block;
-
+.settings-container{
+    width: 60%;
+    height: 100%;
+    margin: 0 auto;
+    text-align: center;
 }
 
-input,
-label {
-    margin: .4rem 0;
+form {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: stretch;
+
+    margin: 0 auto;
+}
+
+.form-group{
+    display: block flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid black;
+    height: 200px;
+    width: 24%;
+    background: #dedede50;
+    padding: 20px;
+    margin: 20px;
 }

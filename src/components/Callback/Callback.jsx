@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import WAPPRequest from '../../utils';
 
 export default function Callback() {
@@ -14,18 +14,19 @@ export default function Callback() {
 
     // if a code is returned
     if (code) {
-      // make a call to the api endpoint to exchange the code for the access token
+      // make a call to the api endpoint to exchange the code for the google_id
       // using the WAPPrequest
       const login = async () => {
         const response = await WAPPRequest('/authorize/verify', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ code }),
         });
 
-        // set both the access token and the jwt to local storage
-        localStorage.setItem('WAPPTOKEN', response.accessToken);
-        localStorage.setItem('WAPP_JWT', response.jwt);
+        // we save the google_id to the local storage
+        // this is their identifier
+        // and maintains the session
+        localStorage.setItem('WAPPTOKEN', response);
+
       };
 
       login();

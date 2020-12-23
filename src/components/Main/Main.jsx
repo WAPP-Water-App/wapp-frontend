@@ -1,58 +1,103 @@
 import React, { useState, useEffect } from 'react';
+import WAPPRequest from '../../utils';
 import Display from '../Display';
 import Reminder from '../Reminder';
 import './main.css';
 
-export default function Main() {
-  //api call to get data here
-  // useeffect
-  //set state
-
-  //TODO: get start, end times
-  // divide by # of intervals
-  // this is the # of reminders/divs needed
-  // example data set
-  const reminders = [
-    { time: 5, amt: 1, percent: 10 },
-    { time: 6, amt: 1, percent: 20 },
-    { time: 7, amt: 1, percent: 30 },
-    { time: 8, amt: 1, percent: 40 },
-    { time: 9, amt: 1, percent: 50 },
-    { time: 10, amt: 1, percent: 60 },
-    { time: 11, amt: 1, percent: 70 },
-    { time: 12, amt: 1, percent: 80 },
-    { time: 13, amt: 1, percent: 90 },
-    { time: 14, amt: 1, percent: 90 },
-    { time: 15, amt: 1, percent: 90 },
-  ];
-
-  // usestate var for progress calculation
-  // and disabling of buttons
-  const [progress, setProgress] = useState(0)
+export default function Main({ hydroIntake, hydroData, hydroSchedule }) {
+  // state variables
+  const [progress, setProgress] = useState(0);
   const [disabled, setDisabled] = useState(
-    new Array(reminders.length).fill(false)
+    new Array(hydroSchedule.length).fill(false)
   );
+  const [status, setStatus] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
+
+  // get the current day's data from the database
+  useEffect(() => {
+    const getDailyData = async () => {
+      const response = await WAPPRequest('/data/daily', {
+        method: 'GET',
+      }).catch(() => {
+        setError(true);
+        return null;
+      });
+
+      if (response) {
+        // set the state progress to progress saved in the db
+        setProgress(response.progress);
+
+        // set status to status saved in the db
+        setStatus(response.status);
+
+        // calculate which buttons need to be disabled
+
+        // if the time has passed, disable the button
+        const newDisabled = hydroSchedule.map((time, index) => {
+          const currentTime = new Date();
+          const newTime = new Date();
+          const scheduledTime = new Date(newTime.setHours(time));
+
+          if (new Date().getTime() > scheduledTime.getTime()) {
+            // if the current time is < scheduled time (the time has not passed)
+            // return false
+            return true;
+          } else {
+            // otherwise the time has not passed, return true
+            return false;
+          }
+        });
+//TODO: NOT UPDATING???
+
+// TODO: filter status array, if not checked and time has passed, mark as "missed"
+        setDisabled(newDisabled);
+
+        //asdglkj
+      }
+
+      setLoading(false);
+    };
+
+    getDailyData();
+  }, []);
+
+  console.log(hydroSchedule);
 
   // handleclick
-  const handleClick = (index) => {
-    // disable the button
+  const handleClick = async (index) => {
+    // if a button is clicked, disable the button
     const newDisabled = [...disabled];
     newDisabled[index] = true;
     setDisabled(newDisabled);
 
     //update completion level for the day
-    //actually this needs to be saved in the db
-    // TODO: save in db
-    const newProgress = progress + 100/reminders.length;
-    setProgress(newProgress)
+    const newProgress = progress + 100 / hydroSchedule.length;
+    setProgress(newProgress);
 
+    const newStatus = [...status];
+    newStatus[index] = 'check';
+    setStatus(newStatus);
+
+    // update the progress level in the databse
+    const response = await WAPPRequest('/data/daily', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ progress: newProgress, status: newStatus }),
+    });
   };
 
   // render the schedule
   const renderSchedule = () => {
-    return reminders.map((reminder, index) => (
+    return hydroSchedule.map((time, index) => (
       <Reminder
-        data={reminders[index]}
+        time={time}
+        amt={(hydroIntake / hydroSchedule.length) * (index + 1)}
+        percent={Math.floor(
+          (((hydroIntake / hydroSchedule.length) * (index + 1)) / hydroIntake) *
+            100 -
+            1
+        )}
         index={index}
         handleClick={handleClick}
         disabled={disabled}

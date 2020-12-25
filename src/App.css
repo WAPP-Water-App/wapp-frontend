@@ -7,19 +7,22 @@
   grid-template-areas:
     'navbar navbar'
     'main panel';
-    width: 100vw;
-    height: 100vh;
+    width: 75vw;
+    height: 60vh;
+    margin: 0 auto
+
 }
 
 .navbar {
   grid-area: navbar;
-  border: 5px solid white;
+
 }
 .main {
   grid-area: main;
-  border: 5px solid white;
+
 }
 .panel {
   grid-area: panel;
-  border: 5px solid white;
+  overflow: auto;
+
 }

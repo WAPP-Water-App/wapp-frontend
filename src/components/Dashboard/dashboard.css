@@ -1,0 +1,12 @@
+.dashboard-container{
+    height: 75vh;
+
+}
+
+.calendarHighlight{
+
+    color: rgb(53, 167, 78);
+    background-color: red !important;
+
+
+}

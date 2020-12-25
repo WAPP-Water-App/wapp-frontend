@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import WAPPRequest from '../../utils';
 import './settings.css';
 
-export default function Settings() {
+export default function Settings({ hydroData }) {
+  const history = useHistory();
+
   const [age, setAge] = useState(0);
   const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [reminder, setReminder] = useState(0);
+
+  const [units, setUnits] = useState('imperial');
+
+  // save this to localstorage  or save to db
 
   // calls the user's settings from the database
   // if none are set, then the default values are displayed
@@ -22,10 +29,10 @@ export default function Settings() {
 
       if (response) {
         setAge(Object.keys(response).length ? response.settings.age : 25);
-        setWeight(Object.keys(response).length ? response.settings.weight : 150);
-        setHeight(
-          Object.keys(response).length ? response.settings.height : 65
+        setWeight(
+          Object.keys(response).length ? response.settings.weight : 150
         );
+        setHeight(Object.keys(response).length ? response.settings.height : 65);
         setStartTime(
           Object.keys(response).length ? response.settings.startTime : 9
         );
@@ -45,9 +52,7 @@ export default function Settings() {
     const times = new Array(24).fill('');
     times[num] = true;
     return times.map((time, index) => (
-      <option value={index} selected={time}>
-        {`${index}:00`}
-      </option>
+      <option key={index} value={index}>{`${index}:00`}</option>
     ));
   };
 
@@ -68,15 +73,25 @@ export default function Settings() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedSettings),
     });
+
+    history.push('/');
+  };
+
+  const handleReset = async () => {
+    await WAPPRequest('/profile/reset', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    history.push('/');
   };
 
   return (
     <div className="settings-container">
-      <h1>SETTINGS</h1>
+      <div className="settings-title">SETTINGS</div>
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label for="age">
+          <label htmlFor="age">
             <div>Age</div>
           </label>
           <input
@@ -91,15 +106,13 @@ export default function Settings() {
           <div>{age}</div>
         </div>
         <div className="form-group">
-          <label for="weight">
+          <label htmlFor="weight">
             <div>Weight</div>
           </label>
           <input
             type="number"
             id="weight"
-            W
             name="weight"
-            W
             min="0"
             max="500"
             value={weight}
@@ -108,41 +121,43 @@ export default function Settings() {
           <div>{weight} lbs</div>
         </div>
         <div className="form-group">
-          <label for="height">
+          <label htmlFor="height">
             <div>Height</div>
           </label>
           <input
             type="number"
             id="height"
-            W
             name="height"
-            W
             min="0"
             max="500"
             value={height}
             onChange={(e) => setHeight(parseInt(e.target.value))}
           />
-          <div>{height} in</div>
+          <div>
+            {(height / 12).toFixed(0)}' {height % 12}"
+          </div>
         </div>
         <div className="form-group">
-          <label for="startTime">
+          <label htmlFor="startTime">
             <div>What time do you start your day:</div>
           </label>
           <select
             name="startTime"
             id="startTime"
+            value={startTime}
             onChange={(e) => setStartTime(parseInt(e.target.value))}
           >
             {renderDropdown(startTime)}
           </select>
         </div>
         <div className="form-group">
-          <label for="endTime">
+          <label htmlFor="endTime">
             <div>What time do you end your day:</div>
           </label>
           <select
             name="endTime"
             id="endTime"
+            value={endTime}
             onChange={(e) => {
               setEndTime(parseInt(e.target.value));
             }}
@@ -151,7 +166,7 @@ export default function Settings() {
           </select>
         </div>
         <div className="form-group">
-          <label for="reminder">
+          <label htmlFor="reminder">
             <div> Notification Intensity</div>
           </label>
           <input
@@ -167,7 +182,10 @@ export default function Settings() {
         </div>
       </form>
       <button className="settings" type="submit" onClick={handleSubmit}>
-        Update Settings
+        Update
+      </button>
+      <button className="settings" onClick={handleReset}>
+        Reset
       </button>
     </div>
   );

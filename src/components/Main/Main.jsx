@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import WAPPRequest from '../../utils';
 import Display from '../Display';
 import Reminder from '../Reminder';
+import Schedule from '../Schedule';
 import './main.css';
 
 export default function Main({ hydroIntake, hydroData, hydroSchedule }) {
@@ -35,22 +36,15 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule }) {
 
         // if the time has passed, disable the button
         const newDisabled = hydroSchedule.map((time, index) => {
-          const currentTime = new Date();
-          const newTime = new Date();
-          const scheduledTime = new Date(newTime.setHours(time));
+          const scheduledTime = new Date();
+          scheduledTime.setHours(parseInt(time)-1);
 
-          if (new Date().getTime() > scheduledTime.getTime()) {
-            // if the current time is < scheduled time (the time has not passed)
-            // return false
-            return true;
-          } else {
-            // otherwise the time has not passed, return true
-            return false;
-          }
+          // if the current time is < scheduled time (the time has not passed)
+          // return false
+          return new Date().getTime() > scheduledTime.getTime();
         });
-//TODO: NOT UPDATING???
 
-// TODO: filter status array, if not checked and time has passed, mark as "missed"
+        // TODO: filter status array, if not checked and time has passed, mark as "missed" agasdgasdgsa
         setDisabled(newDisabled);
 
         //asdglkj
@@ -59,10 +53,10 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule }) {
       setLoading(false);
     };
 
-    getDailyData();
-  }, []);
-
-  console.log(hydroSchedule);
+    if (hydroSchedule.length) {
+      getDailyData();
+    }
+  }, [hydroSchedule]);
 
   // handleclick
   const handleClick = async (index) => {
@@ -87,34 +81,24 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule }) {
     });
   };
 
-  // render the schedule
-  const renderSchedule = () => {
-    return hydroSchedule.map((time, index) => (
-      <Reminder
-        time={time}
-        amt={(hydroIntake / hydroSchedule.length) * (index + 1)}
-        percent={Math.floor(
-          (((hydroIntake / hydroSchedule.length) * (index + 1)) / hydroIntake) *
-            100 -
-            1
-        )}
-        index={index}
-        handleClick={handleClick}
-        disabled={disabled}
-      />
-    ));
-  };
-
   return (
     <div className="main-container">
-      <div className="buttons">
+      {/* <div className="buttons">
         <ul>{renderSchedule()}</ul>
+      </div> */}
+      <div className="schedule">
+        <Schedule
+          hydroSchedule={hydroSchedule}
+          hydroIntake={hydroIntake}
+          handleClick={handleClick}
+          status={status}
+          disabled={disabled}
+        />
       </div>
       <div className="display">
         <Display progress={progress} />
       </div>
-
-      <div className="text"> Hello!</div>
+      <div className="empty"></div>
     </div>
   );
 }

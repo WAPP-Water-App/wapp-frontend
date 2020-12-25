@@ -12,12 +12,11 @@ export default async function WAPPRequest(url, options) {
   };
 
   const response = await fetch(`${API}${url}`, { ...options, headers });
-  const contentType = response.headers.get('Content-Type');
 
-  // console.log(response.headers.get('Content-Type'));
-  // for (const header of response.headers) {
-  //   console.log(header);
-  // }
+  if (response.status === 401){
+    return "401"
+  }
+  const contentType = response.headers.get('Content-Type');
 
   if (contentType && contentType.includes('application/json')) {
     return response.json();

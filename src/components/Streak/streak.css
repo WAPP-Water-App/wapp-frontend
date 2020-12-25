@@ -1,0 +1,13 @@
+.streak-container{
+
+
+}
+
+.streak-container ul{
+    list-style-type: none;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+
+}

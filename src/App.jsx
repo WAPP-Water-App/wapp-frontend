@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import './App.css';
 import Callback from './components/Callback';
+import Dashboard from './components/Dashboard';
 import Login from './components/Login';
+import Logout from './components/Logout';
 import Main from './components/Main';
 import Navbar from './components/Navbar';
 import Panel from './components/Panel';
@@ -13,12 +15,13 @@ function App() {
   // PRIMARY APP CONTAINER
   // all it does is hold the primary components (navbar, main, panel)
   // only the main div element changes with different routes
-  console.log(localStorage.getItem('WAPPTOKEN'));
+  const history = useHistory();
 
   const [hydroData, setHydroData] = useState();
   const [hydroIntake, setHydroIntake] = useState();
   const [hydroSchedule, setHydroSchedule] = useState([]);
   const [date, setDate] = useState();
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
@@ -33,14 +36,18 @@ function App() {
 
       if (response) {
         setHydroData(response);
-        setHydroIntake(Math.ceil(response.settings.weight * (2 / 3)));
+        setHydroIntake(
+          response.settings
+            ? Math.ceil(response.settings.weight * (2 / 3))
+            : 100
+        );
         setHydroSchedule(response.schedule);
-        console.log(response.schedule.length)
-
 
         const date = new Date();
-        setDate(`${date.getMonth()}-${date.getDay()}-${date.getFullYear()}`);
 
+        setDate(
+          `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`
+        );
       }
       setLoading(false);
     };
@@ -48,8 +55,9 @@ function App() {
     getData();
   }, []);
 
-
-
+  if (!localStorage.getItem('WAPPTOKEN')) {
+    history.push('/login');
+  }
   return (
     <div className="App">
       <div className="navbar">
@@ -57,14 +65,17 @@ function App() {
       </div>
       <div className="main">
         <Switch>
-          <Route path="/settings">
-            <Settings />
-          </Route>
           <Route path="/callback">
             <Callback />
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/logout">
+            <Logout />
+          </Route>
+          <Route path="/dashboard">
+            <Dashboard />
           </Route>
           <Route path="/">
             <Main
@@ -76,12 +87,18 @@ function App() {
         </Switch>
       </div>
       <div className="panel">
-        <Panel
-          date={date}
-          hydroIntake={hydroIntake}
-          hydroData={hydroData}
-          hydroSchedule={hydroSchedule}
-        />
+        <Switch>
+          <Route path="/settings">
+            <Settings hydroData={hydroData} />
+          </Route>
+          <Route path="/">
+            <Panel
+              date={date}
+              hydroIntake={hydroIntake}
+              hydroSchedule={hydroSchedule}
+            />
+          </Route>
+        </Switch>
       </div>
     </div>
   );
@@ -89,8 +106,7 @@ function App() {
 
 export default App;
 
-
 // TODO: chat bot
-// timer
-// calendar
-//
+// style login page
+// get rid of setting if logged out
+// when logged in, check if data, dont render until data

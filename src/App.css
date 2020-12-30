@@ -1,28 +1,47 @@
-
 .App {
   display: grid;
-  grid-template-columns: 1.5fr 0.5fr;
-  grid-template-rows: 0.2fr 1.8fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.2fr 1.75fr 0.05fr;
   gap: 0px 0px;
   grid-template-areas:
-    'navbar navbar'
-    'main panel';
-    width: 75vw;
-    height: 60vh;
-    margin: 0 auto
+    'navbar'
+    'main'
+    'credits';
+  width: 75vw;
+  height:70vh;
 
+  margin: 0 auto;
 }
 
 .navbar {
   grid-area: navbar;
-
 }
 .main {
   grid-area: main;
-
 }
-.panel {
-  grid-area: panel;
-  overflow: auto;
+.credits {
+  grid-area: credits;
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+    overflow: auto;
+
+    width: 100%;
+    height: 100%;
+
+  }
+
+  [class*='col-'] {
+    width: 100%;
+  }
+
+.app{
+  display: flex!important;
+  flex-flow: column nowrap!important;
+  width: 90vw!important;
+  height: 100%!important;
+}
+
 
 }

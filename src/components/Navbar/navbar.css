@@ -1,12 +1,26 @@
-.navbar-container{
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.navbar-container img{
+.navbar-container img {
+  height: 100px;
+  width: 100px;
+}
+
+@media only screen and (max-width: 600px) {
+  .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .logo {
     height: 100px;
     width: 100px;
+    position: relative;
+    left: -25%;
+
+  }
 }

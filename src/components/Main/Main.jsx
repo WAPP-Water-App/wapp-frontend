@@ -74,20 +74,16 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
     //update completion level for the day
     // const newProgress = progress + 100 / hydroSchedule.length;
 
-    const calculateProgress = newStatus.reduce((sum, counter, i) => {
-      if (newStatus[i] === 'check') {
-        return i++;
-      }
-    }, 0);
+    const calculateProgress = newStatus.filter((e) => e === "check")
 
-    setProgress(calculateProgress / newStatus.length);
+    setProgress(calculateProgress.length / newStatus.length);
 
     // update the progress level in the databse
     const response = await WAPPRequest('/data/daily', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        progress: calculateProgress / newStatus.length,
+        progress: calculateProgress.length / newStatus.length,
         status: newStatus,
       }),
     });

@@ -10,7 +10,7 @@ export default function Login() {
         <Boop rotation={10} timing={150}>
       <div className = "login-bg">
       <img src="/img/clear-water-drop.png" />
-      <a href="http://localhost:5000/authorize">login</a>
+      <a href={`${process.env.REACT_APP_WAPP_WAPI}/authorize`}>login</a>
       </div>
       </Boop>
       <p>WATER APP.<br/>

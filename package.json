@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.6.0",
     "date-fns": "^2.16.1",
     "date-fns-timezone": "^0.1.4",
+    "dotenv": "^8.2.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.32",
     "react": "^17.0.1",

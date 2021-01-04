@@ -29,13 +29,13 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
 
       if (response) {
         // set the state progress to progress saved in the db
+
         setProgress(response.progress);
 
         // set status to status saved in the db
         setStatus(response.status);
 
         // calculate which buttons need to be disabled
-
         // if the time has passed, disable the button
         const newDisabled = hydroSchedule.map((time, index) => {
           const scheduledTime = new Date();
@@ -43,7 +43,10 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
 
           // if the current time is < scheduled time (the time has not passed)
           // return false
-          return new Date().getTime() > scheduledTime.getTime();
+          return (
+            new Date().getTime() > scheduledTime.getTime() ||
+            response.status[index] === 'check'
+          );
         });
 
         setDisabled(newDisabled);
@@ -64,26 +67,36 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
     newDisabled[index] = true;
     setDisabled(newDisabled);
 
-    //update completion level for the day
-    const newProgress = progress + 100 / hydroSchedule.length;
-    setProgress(newProgress);
-
     const newStatus = [...status];
     newStatus[index] = 'check';
     setStatus(newStatus);
+
+    //update completion level for the day
+    // const newProgress = progress + 100 / hydroSchedule.length;
+
+    const calculateProgress = newStatus.reduce((sum, counter, i) => {
+      if (newStatus[i] === 'check') {
+        return i++;
+      }
+    }, 0);
+
+    setProgress(calculateProgress / newStatus.length);
 
     // update the progress level in the databse
     const response = await WAPPRequest('/data/daily', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ progress: newProgress, status: newStatus }),
+      body: JSON.stringify({
+        progress: calculateProgress / newStatus.length,
+        status: newStatus,
+      }),
     });
   };
 
   return (
     <div className="main-container">
       <div className="primary">
-      <div className="display">
+        <div className="display">
           <Display progress={progress} />
         </div>
         <div className="schedule">
@@ -95,7 +108,6 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
             disabled={disabled}
           />
         </div>
-
       </div>
 
       <div className="panel">

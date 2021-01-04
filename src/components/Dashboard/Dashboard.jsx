@@ -47,7 +47,6 @@ export default function Dashboard() {
         moment(day.date).tz('UTC').format('MM-DD-YYYY') === formatHighlightDay
     );
     setSelectedDay(getDay);
-    console.log(getDay);
   }
 
   function tileClassName({ date, view }) {

@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import WAPPRequest from '../../utils';
 import Display from '../Display';
-import Reminder from '../Reminder';
+import Panel from '../Panel';
 import Schedule from '../Schedule';
+import Settings from '../Settings';
 import './main.css';
 
-export default function Main({ hydroIntake, hydroData, hydroSchedule }) {
+export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
   // state variables
   const [progress, setProgress] = useState(0);
   const [disabled, setDisabled] = useState(
@@ -37,17 +39,14 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule }) {
         // if the time has passed, disable the button
         const newDisabled = hydroSchedule.map((time, index) => {
           const scheduledTime = new Date();
-          scheduledTime.setHours(parseInt(time)-1);
+          scheduledTime.setHours(parseInt(time) - 1);
 
           // if the current time is < scheduled time (the time has not passed)
           // return false
           return new Date().getTime() > scheduledTime.getTime();
         });
 
-        // TODO: filter status array, if not checked and time has passed, mark as "missed" agasdgasdgsa
         setDisabled(newDisabled);
-
-        //asdglkj
       }
 
       setLoading(false);
@@ -83,22 +82,36 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule }) {
 
   return (
     <div className="main-container">
-      {/* <div className="buttons">
-        <ul>{renderSchedule()}</ul>
-      </div> */}
-      <div className="schedule">
-        <Schedule
-          hydroSchedule={hydroSchedule}
-          hydroIntake={hydroIntake}
-          handleClick={handleClick}
-          status={status}
-          disabled={disabled}
-        />
-      </div>
+      <div className="primary">
       <div className="display">
-        <Display progress={progress} />
+          <Display progress={progress} />
+        </div>
+        <div className="schedule">
+          <Schedule
+            hydroSchedule={hydroSchedule}
+            hydroIntake={hydroIntake}
+            handleClick={handleClick}
+            status={status}
+            disabled={disabled}
+          />
+        </div>
+
       </div>
-      <div className="empty"></div>
+
+      <div className="panel">
+        <Switch>
+          <Route path="/settings">
+            <Settings hydroData={hydroData} />
+          </Route>
+          <Route path="/">
+            <Panel
+              date={date}
+              hydroIntake={hydroIntake}
+              hydroSchedule={hydroSchedule}
+            />
+          </Route>
+        </Switch>
+      </div>
     </div>
   );
 }

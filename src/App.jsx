@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import './App.css';
 import Callback from './components/Callback';
+import Credits from './components/Credits';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Main from './components/Main';
 import Navbar from './components/Navbar';
-import Panel from './components/Panel';
-import Settings from './components/Settings';
+import Spinner from './components/Spinner';
 import WAPPRequest from './utils';
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
   const [hydroSchedule, setHydroSchedule] = useState([]);
   const [date, setDate] = useState();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
 
   useEffect(() => {
@@ -58,6 +58,14 @@ function App() {
   if (!localStorage.getItem('WAPPTOKEN')) {
     history.push('/login');
   }
+
+  if (loading){
+    return <Spinner />
+  }
+
+  if (error){
+    return null;
+  }
   return (
     <div className="App">
       <div className="navbar">
@@ -82,24 +90,12 @@ function App() {
               hydroIntake={hydroIntake}
               hydroData={hydroData}
               hydroSchedule={hydroSchedule}
-            />
-          </Route>
-        </Switch>
-      </div>
-      <div className="panel">
-        <Switch>
-          <Route path="/settings">
-            <Settings hydroData={hydroData} />
-          </Route>
-          <Route path="/">
-            <Panel
               date={date}
-              hydroIntake={hydroIntake}
-              hydroSchedule={hydroSchedule}
             />
           </Route>
         </Switch>
       </div>
+      <div className="credits"><Credits/></div>
     </div>
   );
 }

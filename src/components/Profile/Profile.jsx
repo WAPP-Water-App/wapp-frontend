@@ -56,6 +56,11 @@ export default function Profile() {
         </Link>
       </Boop>
       <Boop rotation={10} timing={150}>
+      <Link to="/dashboard">
+          <img className="profile-link" src="img/statistics.png" />
+        </Link>
+        </Boop>
+      <Boop rotation={10} timing={150}>
         <Link to="/settings">
           <img className="profile-link" src="img/settings.png" />
         </Link>
@@ -64,6 +69,7 @@ export default function Profile() {
         <Link to="/logout">
           <img className="profile-link" src="img/exit.png" />
         </Link>
+
       </Boop>
 
       {renderProfile()}

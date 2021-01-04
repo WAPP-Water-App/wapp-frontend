@@ -75,8 +75,6 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
     // const newProgress = progress + 100 / hydroSchedule.length;
 
     const calculateProgress = newStatus.reduce((sum, counter, i) => {
-      console.log(newStatus[i]);
-
       if (newStatus[i] === 'check') {
         return i++;
       }
@@ -88,7 +86,10 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
     const response = await WAPPRequest('/data/daily', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ progress: calculateProgress / newStatus.length, status: newStatus }),
+      body: JSON.stringify({
+        progress: calculateProgress / newStatus.length,
+        status: newStatus,
+      }),
     });
   };
 

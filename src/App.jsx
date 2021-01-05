@@ -20,6 +20,7 @@ function App() {
   const [hydroData, setHydroData] = useState();
   const [hydroIntake, setHydroIntake] = useState();
   const [hydroSchedule, setHydroSchedule] = useState([]);
+  const [hydroSettings, setHydroSettings] = useState();
   const [date, setDate] = useState();
 
   const [loading, setLoading] = useState(false);
@@ -43,6 +44,8 @@ function App() {
         );
         setHydroSchedule(response.schedule);
 
+        setHydroSettings(response.settings);
+
         const date = new Date();
 
         setDate(
@@ -50,9 +53,8 @@ function App() {
         );
 
         setLoading(false);
-      }
-      else{
-        history.push('/settings')
+      } else {
+        history.push('/settings');
       }
     };
 
@@ -60,17 +62,15 @@ function App() {
   }, []);
 
   const renderApp = () => {
-
     if (loading) {
       setTimeout(function () {
         window.location.reload();
-      }, 1000);
+      }, 100);
     }
 
     if (error) {
       return <div>Error</div>;
     }
-
 
     return (
       <>
@@ -94,7 +94,6 @@ function App() {
             <Route path="/">
               <Main
                 hydroIntake={hydroIntake}
-                hydroData={hydroData}
                 hydroSchedule={hydroSchedule}
                 date={date}
               />

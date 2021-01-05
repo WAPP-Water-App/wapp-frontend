@@ -137,7 +137,7 @@ select:focus {
 }
 
 button.settings {
-  border-radius: 10px;
+padding: 6px 10px;
   margin: 10px;
   text-transform: uppercase;
   background-color: white;
@@ -149,4 +149,8 @@ button.settings:hover {
   background-color: #72d3fe;
   color: white;
   cursor: pointer;
+}
+
+button.units:focus{
+  background-color: #72d3fe;
 }

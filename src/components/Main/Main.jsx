@@ -8,7 +8,12 @@ import Settings from '../Settings';
 import Spinner from '../Spinner';
 import './main.css';
 
-export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
+export default function Main({
+  hydroIntake,
+  hydroSchedule,
+  hydroSettings,
+  date,
+}) {
   // state variables
   const [progress, setProgress] = useState(0);
   const [disabled, setDisabled] = useState(
@@ -30,7 +35,6 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
 
       if (response) {
         // set the state progress to progress saved in the db
-
         setProgress(response.progress);
 
         // set status to status saved in the db
@@ -90,14 +94,12 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
   };
 
   const renderMain = () => {
-
     if (loading) {
-   <Spinner />
+      <Spinner />;
     }
     if (error) {
       return <div>Error</div>;
     }
-
 
     return (
       <>
@@ -119,7 +121,7 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
         <div className="panel">
           <Switch>
             <Route path="/settings">
-              <Settings hydroData={hydroData} />
+              <Settings />
             </Route>
             <Route path="/">
               <Panel

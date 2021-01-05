@@ -4,7 +4,7 @@ import WAPPRequest from '../../utils';
 import Spinner from '../Spinner';
 import './settings.css';
 
-export default function Settings({ hydroData }) {
+export default function Settings() {
   const history = useHistory();
 
   const [age, setAge] = useState(0);
@@ -13,16 +13,9 @@ export default function Settings({ hydroData }) {
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [reminder, setReminder] = useState(0);
+  const [units, setUnits] = useState('imperial');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
-
-  const [units, setUnits] = useState('imperial');
-
-  // save this to localstorage  or save to db
-
-  // calls the user's settings from the database
-  // if none are set, then the default values are displayed
-  // else display their current settings
 
   useEffect(() => {
     const getUserSettings = async () => {
@@ -31,6 +24,7 @@ export default function Settings({ hydroData }) {
       }).catch((error) => console.log(error));
 
       if (response) {
+        console.log('settings response', response);
         setAge(Object.keys(response).length ? response.settings.age : 25);
         setWeight(
           Object.keys(response).length ? response.settings.weight : 150
@@ -47,7 +41,7 @@ export default function Settings({ hydroData }) {
         );
         setLoading(false);
       }
-    }
+    };
     getUserSettings();
   }, []);
 
@@ -64,12 +58,14 @@ export default function Settings({ hydroData }) {
 
     const updatedSettings = {
       age,
-      weight,
-      height,
+      weight: units === 'imperial' ? weight : Math.floor(weight * 2.205),
+      height: units === 'imperial' ? height : Math.floor(height / 2.54),
       startTime,
       endTime,
       reminder,
     };
+
+    console.log('updated sett', updatedSettings)
 
     const response = await WAPPRequest('/profile/settings', {
       method: 'POST',
@@ -92,16 +88,32 @@ export default function Settings({ hydroData }) {
 
   const renderSettings = () => {
     if (loading) {
-
-      history.push('/settings')
+      history.push('/settings');
     }
     if (error) {
       return <div>Error</div>;
     }
-
+    console.log(units);
     return (
       <>
         <div className="settings-title">SETTINGS</div>
+        <button
+          className="settings units"
+          onClick={() => {
+            setUnits('imperial');
+          }}
+        >
+          Imperial
+        </button>
+        <button
+          className="settings units"
+          onClick={() => {
+            setUnits('metric');
+          }}
+        >
+          Metric
+        </button>
+        <div>{units.toUpperCase()}</div>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -128,11 +140,15 @@ export default function Settings({ hydroData }) {
               id="weight"
               name="weight"
               min="0"
-              max="500"
+              max={units === 'imperial' ? '500' : '250'}
               value={weight}
               onChange={(e) => setWeight(parseInt(e.target.value))}
             />
-            <div>{weight} lbs</div>
+            <div>
+              {units === 'imperial'
+                ? `${weight} lbs`
+                : `${weight} kg`}
+            </div>
           </div>
           <div className="form-group">
             <label htmlFor="height">
@@ -143,12 +159,14 @@ export default function Settings({ hydroData }) {
               id="height"
               name="height"
               min="0"
-              max="500"
+              max={units === 'imperial' ? '100' : '275'}
               value={height}
               onChange={(e) => setHeight(parseInt(e.target.value))}
             />
             <div>
-              {Math.floor(height / 12)}' {height % 12}"
+              {units === 'imperial'
+                ? `${Math.floor(height / 12)}' ${height % 12}`
+                : `${height} cm`}
             </div>
           </div>
           <div className="form-group">

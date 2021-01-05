@@ -1,17 +1,16 @@
-.credits-container{
-    display: flex;
-    justify-content: flex-end;
-    font-size: 15px;
-    margin-top: 3%;
+.credits-container {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 15px;
+  margin-top: 3%;
 }
 
-.credits-container img{
-    height: 60px;
-    width: 60px;
+.credits-container img {
+  height: 60px;
+  width: 60px;
 }
 
-.credits-container div{
-
+.credits-container div {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
@@ -19,8 +18,27 @@
   margin: 0 5px;
 }
 
-.credits-container ul{
+.credits-container ul {
   list-style-type: none;
+}
+
+.credits-container a:link{
+  text-decoration: none;
+  font-size: 1.5em;
+  transition-duration: 2s;
 
 }
 
+.credits-container a:visited{
+  text-decoration: none;
+  color:  #72d3fe;
+}
+
+.credits-container a:hover{
+  text-decoration: none;
+  text-decoration: underline;
+}
+
+.credits-container a:active{
+  text-decoration: none;
+}

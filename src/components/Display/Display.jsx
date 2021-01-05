@@ -5,7 +5,6 @@ import './display.css';
 export default function Display({ progress }) {
 
   const [isBooped, setIsBooped] = useState(false);
-
   const x = 0;
   const y = 0;
   const rotation = 60;
@@ -52,7 +51,7 @@ export default function Display({ progress }) {
       <div
         className="progress-bar"
         style={{
-          background: `linear-gradient(0deg, rgba(114,211,254,1) 0%, rgba(255,255,255,0) ${progress}%)`,
+          background: `linear-gradient(0deg, rgba(114,211,254,1) 0%, rgba(255,255,255,0) ${Math.ceil(progress*100)}%)`,
         }}
       >
         <img src="/img/clear-water-drop.png" />

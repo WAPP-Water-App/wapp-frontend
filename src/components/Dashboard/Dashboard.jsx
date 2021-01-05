@@ -5,6 +5,7 @@ import './dashboard.css';
 import 'react-calendar/dist/Calendar.css';
 import WAPPRequest from '../../utils';
 import { set } from 'date-fns';
+import Spinner from '../Spinner';
 
 export default function Dashboard() {
   const [value, onChange] = useState(new Date());
@@ -60,42 +61,54 @@ export default function Dashboard() {
     }
   }
 
-  return (
-    <div className="dashboard-container">
-      <div className="calendar-details">
-        {selectedDay ? (
-          <>
-            <div className="calendar-date">
-              {moment(selectedDay.date).tz('UTC').format('ddd, MMM-DD-YY')}
-            </div>
-            <div className="calendar-progress">
-              Progress: {selectedDay.progress.toFixed(0)}%
-            </div>
-            <div className="calendar-status">
-              {selectedDay.status.map((d) => (
-                <div>
-                  {d ? (
-                    <img src="/img/confirmation.png" />
-                  ) : (
-                    <img src="/img/close (1).png" />
-                  )}
-                </div>
-              ))}
-            </div>
-          </>
-        ) : (
-          <div className="calendar-progress">Pick A Highlighted Day</div>
-        )}
-      </div>
-      <div className="calendar">
-        <Calendar
-          tileClassName={tileClassName}
-          // tileClassName={tileClassName}
-          onChange={onChange}
-          value={value}
-          onClickDay={(value, event) => getDataForClickedDay(value)}
-        />
-      </div>
-    </div>
-  );
+  const renderDashboard = () => {
+    if (loading) {
+      return <Spinner />;
+    }
+
+    if (error) {
+      return <div>Error</div>;
+    }
+
+    return (
+      <>
+        <div className="calendar-details">
+          {selectedDay ? (
+            <>
+              <div className="calendar-date">
+                {moment(selectedDay.date).tz('UTC').format('ddd, MMM-DD-YY')}
+              </div>
+              <div className="calendar-progress">
+                Progress: {Math.ceil(selectedDay.progress * 100)}%
+              </div>
+              <div className="calendar-status">
+                {selectedDay.status.map((d) => (
+                  <div>
+                    {d ? (
+                      <img src="/img/confirmation.png" />
+                    ) : (
+                      <img src="/img/close (1).png" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="calendar-progress">Pick A Highlighted Day</div>
+          )}
+        </div>
+        <div className="calendar">
+          <Calendar
+            tileClassName={tileClassName}
+            // tileClassName={tileClassName}
+            onChange={onChange}
+            value={value}
+            onClickDay={(value, event) => getDataForClickedDay(value)}
+          />
+        </div>
+      </>
+    );
+  };
+
+  return <div className="dashboard-container">{renderDashboard()}</div>;
 }

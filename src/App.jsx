@@ -20,6 +20,7 @@ function App() {
   const [hydroData, setHydroData] = useState();
   const [hydroIntake, setHydroIntake] = useState();
   const [hydroSchedule, setHydroSchedule] = useState([]);
+  const [hydroSettings, setHydroSettings] = useState();
   const [date, setDate] = useState();
 
   const [loading, setLoading] = useState(false);
@@ -43,66 +44,70 @@ function App() {
         );
         setHydroSchedule(response.schedule);
 
+        setHydroSettings(response.settings);
+
         const date = new Date();
 
         setDate(
           `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`
         );
+
+        setLoading(false);
+      } else {
+        history.push('/settings');
       }
-      setLoading(false);
     };
 
     getData();
   }, []);
 
-  if (!localStorage.getItem('WAPPTOKEN')) {
-    history.push('/login');
-  }
+  const renderApp = () => {
+    if (loading) {
+      setTimeout(function () {
+        window.location.reload();
+      }, 100);
+    }
 
-  if (loading){
-    return <Spinner />
-  }
+    if (error) {
+      return <div>Error</div>;
+    }
 
-  if (error){
-    return null;
-  }
-  return (
-    <div className="App">
-      <div className="navbar">
-        <Navbar />
-      </div>
-      <div className="main">
-        <Switch>
-          <Route path="/callback">
-            <Callback />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/logout">
-            <Logout />
-          </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          <Route path="/">
-            <Main
-              hydroIntake={hydroIntake}
-              hydroData={hydroData}
-              hydroSchedule={hydroSchedule}
-              date={date}
-            />
-          </Route>
-        </Switch>
-      </div>
-      <div className="credits"><Credits/></div>
-    </div>
-  );
+    return (
+      <>
+        <div className="navbar">
+          <Navbar />
+        </div>
+        <div className="main">
+          <Switch>
+            <Route path="/callback">
+              <Callback />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/logout">
+              <Logout />
+            </Route>
+            <Route path="/dashboard">
+              <Dashboard />
+            </Route>
+            <Route path="/">
+              <Main
+                hydroIntake={hydroIntake}
+                hydroSchedule={hydroSchedule}
+                date={date}
+              />
+            </Route>
+          </Switch>
+        </div>
+        <div className="credits">
+          <Credits />
+        </div>
+      </>
+    );
+  };
+
+  return <div className="App">{renderApp()}</div>;
 }
 
 export default App;
-
-// TODO: chat bot
-// style login page
-// get rid of setting if logged out
-// when logged in, check if data, dont render until data

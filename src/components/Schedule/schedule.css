@@ -41,7 +41,7 @@
 
 .schedule-container ul li div img {
   position: relative;
-  left:150%;
+  left: 150%;
   -ms-transform: rotate(90deg);
   transform: rotate(90deg);
   height: 40px;

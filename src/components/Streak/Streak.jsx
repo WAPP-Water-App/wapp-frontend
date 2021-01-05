@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import React, { useState, useEffect } from 'react';
 import WAPPRequest from '../../utils';
+import Spinner from '../Spinner';
 import StreakDay from '../StreakDay/StreakDay';
 import './streak.css';
 
@@ -29,7 +30,17 @@ export default function Streak() {
   }, []);
 
   const renderStreak = () => {
-    return streakData.map((day, index) => <li key={index}><StreakDay data={day} /></li>);
+    if (loading) {
+      return <Spinner />;
+    }
+    if (error) {
+      return <div>Error</div>;
+    }
+    return streakData.map((day, index) => (
+      <li key={index}>
+        <StreakDay data={day} />
+      </li>
+    ));
   };
 
   return (

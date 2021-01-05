@@ -1,22 +1,17 @@
 import React from 'react';
+import Boop from '../Boop';
 import Streak from '../Streak';
 import Timer from '../Timer';
 import './panel.css';
 
 export default function Panel({ date, hydroIntake, hydroSchedule }) {
-  const handleNan = () => {
-    if (!hydroIntake) {
-      return 0
-    }
-    else {
-      return hydroIntake
-    }
-  }
 
   return (
     <div className="panel-container">
       <div className="panel-card">
-      <img src="/img/clock.png" />
+        <Boop rotation={10} timing={150}>
+          <img src="/img/clock.png" />
+        </Boop>
         <Timer hydroSchedule={hydroSchedule} />
       </div>
       <div className="panel-card">
@@ -24,12 +19,18 @@ export default function Panel({ date, hydroIntake, hydroSchedule }) {
       </div>
       <div className="panel-card">
         <div>
-          <img src="/img/calendar.png" />
-          {date}
+          <Boop rotation={10} timing={150}>
+            <img src="/img/calendar.png" />
+          </Boop>
+          <span>{date}</span>
         </div>
         <div>
-          <img src="/img/target.png" />
-          {handleNan()} fl oz / {(handleNan() / 8).toFixed(2)} cups
+          <Boop rotation={10} timing={150}>
+            <img src="/img/target.png" />
+          </Boop>
+          <span>
+            {hydroIntake? hydroIntake: 0} fl oz / {(hydroIntake? hydroIntake: 0 / 8).toFixed(2)} cups
+          </span>
         </div>
       </div>
     </div>

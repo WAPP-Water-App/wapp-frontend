@@ -5,9 +5,15 @@ import Display from '../Display';
 import Panel from '../Panel';
 import Schedule from '../Schedule';
 import Settings from '../Settings';
+import Spinner from '../Spinner';
 import './main.css';
 
-export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
+export default function Main({
+  hydroIntake,
+  hydroSchedule,
+  hydroSettings,
+  date,
+}) {
   // state variables
   const [progress, setProgress] = useState(0);
   const [disabled, setDisabled] = useState(
@@ -29,7 +35,6 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
 
       if (response) {
         // set the state progress to progress saved in the db
-
         setProgress(response.progress);
 
         // set status to status saved in the db
@@ -71,13 +76,9 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
     newStatus[index] = 'check';
     setStatus(newStatus);
 
-    //update completion level for the day
-    // const newProgress = progress + 100 / hydroSchedule.length;
+    const filterProgress = newStatus.filter((e) => e === 'check');
 
-    const filterProgress = newStatus.filter((e) => e === "check")
-
-    const calculateProgress = filterProgress.length/newStatus.length;
-
+    const calculateProgress = filterProgress.length / newStatus.length;
 
     setProgress(calculateProgress);
 
@@ -92,37 +93,48 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
     });
   };
 
-  return (
-    <div className="main-container">
-      <div className="primary">
-        <div className="display">
-          <Display progress={progress} />
-        </div>
-        <div className="schedule">
-          <Schedule
-            hydroSchedule={hydroSchedule}
-            hydroIntake={hydroIntake}
-            handleClick={handleClick}
-            status={status}
-            disabled={disabled}
-          />
-        </div>
-      </div>
+  const renderMain = () => {
+    if (loading) {
+      <Spinner />;
+    }
+    if (error) {
+      return <div>Error</div>;
+    }
 
-      <div className="panel">
-        <Switch>
-          <Route path="/settings">
-            <Settings hydroData={hydroData} />
-          </Route>
-          <Route path="/">
-            <Panel
-              date={date}
-              hydroIntake={hydroIntake}
+    return (
+      <>
+        <div className="primary">
+          <div className="display">
+            <Display progress={progress} />
+          </div>
+          <div className="schedule">
+            <Schedule
               hydroSchedule={hydroSchedule}
+              hydroIntake={hydroIntake}
+              handleClick={handleClick}
+              status={status}
+              disabled={disabled}
             />
-          </Route>
-        </Switch>
-      </div>
-    </div>
-  );
+          </div>
+        </div>
+
+        <div className="panel">
+          <Switch>
+            <Route path="/settings">
+              <Settings />
+            </Route>
+            <Route path="/">
+              <Panel
+                date={date}
+                hydroIntake={hydroIntake}
+                hydroSchedule={hydroSchedule}
+              />
+            </Route>
+          </Switch>
+        </div>
+      </>
+    );
+  };
+
+  return <div className="main-container">{renderMain()}</div>;
 }

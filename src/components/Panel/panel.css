@@ -36,6 +36,18 @@
   flex-flow: column nowrap;
 }
 
+
+.panel-card:nth-child(3) div {
+ display: flex;
+ flex-flow: row nowrap;
+ justify-content: space-between;
+ align-items: center;
+}
+
+.panel-card:nth-child(3) div span {
+margin: 0 15px;
+ }
+
 .panel-card img {
   height: 40px;
   width: 40px;

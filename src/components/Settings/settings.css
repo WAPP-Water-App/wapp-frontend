@@ -15,12 +15,12 @@ form {
   flex-flow: column nowrap;
   justify-content: space-around;
   align-items: stretch;
-
   margin: 0 auto;
 }
 
 .form-group {
-  display: block flex;
+  display: flex;
+  flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
   border-bottom: 5px solid #83d9fe;
@@ -53,8 +53,10 @@ form {
 ::-webkit-scrollbar-button {
 }
 
-textarea:focus, input:focus, select:focus{
-    outline: none;
+textarea:focus,
+input:focus,
+select:focus {
+  outline: none;
 }
 
 input[type='range'] {
@@ -79,13 +81,13 @@ input[type='range']::-webkit-slider-thumb {
   height: 20px;
   width: 20px;
   border-radius: 25px;
-  background:  #72d3fe;
+  background: #72d3fe;
   cursor: pointer;
   -webkit-appearance: none;
   margin-top: -1px;
 }
 input[type='range']:focus::-webkit-slider-runnable-track {
-  background:  #bbeafe;
+  background: #bbeafe;
   border-radius: 10px;
 }
 
@@ -106,12 +108,10 @@ input[type='number'] {
   text-align: center;
 }
 
-
 input[type='number']:focus {
-background: #bbeafe;
-border: none;
-  }
-
+  background: #bbeafe;
+  border: none;
+}
 
 select {
   appearance: none;
@@ -123,11 +123,34 @@ select {
   font-family: inherit;
   cursor: inherit;
   line-height: inherit;
-  text-align-last:center;
+  text-align-last: center;
 }
 
-
 select:focus {
-    background: #bbeafe;
-    border: none;
-      }
+  background: rgb(114, 211, 254);
+  background: linear-gradient(
+    0deg,
+    #72d3fe 100%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border: none;
+}
+
+button.settings {
+padding: 6px 10px;
+  margin: 10px;
+  text-transform: uppercase;
+  background-color: white;
+  border: 3px solid #72d3fe;
+  font-size: 0.5em;
+}
+
+button.settings:hover {
+  background-color: #72d3fe;
+  color: white;
+  cursor: pointer;
+}
+
+button.units:focus{
+  background-color: #72d3fe;
+}

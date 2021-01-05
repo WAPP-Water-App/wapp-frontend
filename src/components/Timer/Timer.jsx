@@ -67,6 +67,12 @@ export default function Timer({ hydroSchedule }) {
           <img src="/img/panda.png" />
         </div>
       );
+    } else if (!timer) {
+      return (
+        <div>
+          0:00
+        </div>
+      )
     }
     return (
       <div>

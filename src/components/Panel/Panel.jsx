@@ -4,6 +4,14 @@ import Timer from '../Timer';
 import './panel.css';
 
 export default function Panel({ date, hydroIntake, hydroSchedule }) {
+  const handleNan = () => {
+    if (!hydroIntake) {
+      return 0
+    }
+    else {
+      return hydroIntake
+    }
+  }
 
   return (
     <div className="panel-container">
@@ -21,7 +29,7 @@ export default function Panel({ date, hydroIntake, hydroSchedule }) {
         </div>
         <div>
           <img src="/img/target.png" />
-          {hydroIntake} fl oz / {(hydroIntake / 8).toFixed(2)} cups
+          {handleNan()} fl oz / {(handleNan() / 8).toFixed(2)} cups
         </div>
       </div>
     </div>

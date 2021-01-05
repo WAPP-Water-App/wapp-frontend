@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import WAPPRequest from '../../utils';
+import Spinner from '../Spinner';
 import './settings.css';
 
 export default function Settings({ hydroData }) {
@@ -12,6 +13,8 @@ export default function Settings({ hydroData }) {
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [reminder, setReminder] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
 
   const [units, setUnits] = useState('imperial');
 
@@ -42,9 +45,9 @@ export default function Settings({ hydroData }) {
         setReminder(
           Object.keys(response).length ? response.settings.reminder : 1
         );
+        setLoading(false);
       }
-    };
-
+    }
     getUserSettings();
   }, []);
 
@@ -75,6 +78,7 @@ export default function Settings({ hydroData }) {
     });
 
     history.push('/');
+    window.location.reload();
   };
 
   const handleReset = async () => {
@@ -83,112 +87,123 @@ export default function Settings({ hydroData }) {
       headers: { 'Content-Type': 'application/json' },
     });
     history.push('/');
+    window.location.reload();
   };
 
-  return (
-    <div className="settings-container">
-      <div className="settings-title">SETTINGS</div>
+  const renderSettings = () => {
+    if (loading) {
 
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="age">
-            <div>Age</div>
-          </label>
-          <input
-            type="range"
-            id="age"
-            name="age"
-            min="0"
-            max="100"
-            value={age}
-            onChange={(e) => setAge(parseInt(e.target.value))}
-          />
-          <div>{age}</div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="weight">
-            <div>Weight</div>
-          </label>
-          <input
-            type="number"
-            id="weight"
-            name="weight"
-            min="0"
-            max="500"
-            value={weight}
-            onChange={(e) => setWeight(parseInt(e.target.value))}
-          />
-          <div>{weight} lbs</div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="height">
-            <div>Height</div>
-          </label>
-          <input
-            type="number"
-            id="height"
-            name="height"
-            min="0"
-            max="500"
-            value={height}
-            onChange={(e) => setHeight(parseInt(e.target.value))}
-          />
-          <div>
-            {(height / 12).toFixed(0)}' {height % 12}"
+      history.push('/settings')
+    }
+    if (error) {
+      return <div>Error</div>;
+    }
+
+    return (
+      <>
+        <div className="settings-title">SETTINGS</div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="age">
+              <div>Age</div>
+            </label>
+            <input
+              type="range"
+              id="age"
+              name="age"
+              min="0"
+              max="100"
+              value={age}
+              onChange={(e) => setAge(parseInt(e.target.value))}
+            />
+            <div>{age}</div>
           </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="startTime">
-            <div>What time do you start your day:</div>
-          </label>
-          <select
-            name="startTime"
-            id="startTime"
-            value={startTime}
-            onChange={(e) => setStartTime(parseInt(e.target.value))}
-          >
-            {renderDropdown(startTime)}
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="endTime">
-            <div>What time do you end your day:</div>
-          </label>
-          <select
-            name="endTime"
-            id="endTime"
-            value={endTime}
-            onChange={(e) => {
-              setEndTime(parseInt(e.target.value));
-            }}
-          >
-            {renderDropdown(endTime)}
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="reminder">
-            <div> Notification Intensity</div>
-          </label>
-          <input
-            type="range"
-            id="reminder"
-            name="reminder"
-            min="1"
-            max="5"
-            value={reminder}
-            onChange={(e) => setReminder(parseInt(e.target.value))}
-          />
-          <div>Every {reminder} Hours</div>
-        </div>
-      </form>
-      <button className="settings" type="submit" onClick={handleSubmit}>
-        Update
-      </button>
-      <button className="settings" onClick={handleReset}>
-        Reset
-      </button>
-    </div>
-  );
+          <div className="form-group">
+            <label htmlFor="weight">
+              <div>Weight</div>
+            </label>
+            <input
+              type="number"
+              id="weight"
+              name="weight"
+              min="0"
+              max="500"
+              value={weight}
+              onChange={(e) => setWeight(parseInt(e.target.value))}
+            />
+            <div>{weight} lbs</div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="height">
+              <div>Height</div>
+            </label>
+            <input
+              type="number"
+              id="height"
+              name="height"
+              min="0"
+              max="500"
+              value={height}
+              onChange={(e) => setHeight(parseInt(e.target.value))}
+            />
+            <div>
+              {Math.floor(height / 12)}' {height % 12}"
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="startTime">
+              <div>What time do you start your day:</div>
+            </label>
+            <select
+              name="startTime"
+              id="startTime"
+              value={startTime}
+              onChange={(e) => setStartTime(parseInt(e.target.value))}
+            >
+              {renderDropdown(startTime)}
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="endTime">
+              <div>What time do you end your day:</div>
+            </label>
+            <select
+              name="endTime"
+              id="endTime"
+              value={endTime}
+              onChange={(e) => {
+                setEndTime(parseInt(e.target.value));
+              }}
+            >
+              {renderDropdown(endTime)}
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="reminder">
+              <div> Notification Intensity</div>
+            </label>
+            <input
+              type="range"
+              id="reminder"
+              name="reminder"
+              min="1"
+              max="5"
+              value={reminder}
+              onChange={(e) => setReminder(parseInt(e.target.value))}
+            />
+            <div>Every {reminder} Hours</div>
+          </div>
+        </form>
+        <button className="settings" type="submit" onClick={handleSubmit}>
+          Update
+        </button>
+        <button className="settings" onClick={handleReset}>
+          Reset
+        </button>
+      </>
+    );
+  };
+
+  return <div className="settings-container">{renderSettings()}</div>;
 }
-
-

@@ -48,61 +48,67 @@ function App() {
         setDate(
           `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`
         );
+
+        setLoading(false);
       }
-      setLoading(false);
+      else{
+        history.push('/settings')
+      }
     };
 
     getData();
   }, []);
 
-  if (!localStorage.getItem('WAPPTOKEN')) {
-    history.push('/login');
-  }
+  const renderApp = () => {
 
-  if (loading){
-    return <Spinner />
-  }
+    if (loading) {
+      setTimeout(function () {
+        window.location.reload();
+      }, 1000);
+    }
 
-  if (error){
-    return null;
-  }
-  return (
-    <div className="App">
-      <div className="navbar">
-        <Navbar />
-      </div>
-      <div className="main">
-        <Switch>
-          <Route path="/callback">
-            <Callback />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/logout">
-            <Logout />
-          </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          <Route path="/">
-            <Main
-              hydroIntake={hydroIntake}
-              hydroData={hydroData}
-              hydroSchedule={hydroSchedule}
-              date={date}
-            />
-          </Route>
-        </Switch>
-      </div>
-      <div className="credits"><Credits/></div>
-    </div>
-  );
+    if (error) {
+      return <div>Error</div>;
+    }
+
+
+    return (
+      <>
+        <div className="navbar">
+          <Navbar />
+        </div>
+        <div className="main">
+          <Switch>
+            <Route path="/callback">
+              <Callback />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/logout">
+              <Logout />
+            </Route>
+            <Route path="/dashboard">
+              <Dashboard />
+            </Route>
+            <Route path="/">
+              <Main
+                hydroIntake={hydroIntake}
+                hydroData={hydroData}
+                hydroSchedule={hydroSchedule}
+                date={date}
+              />
+            </Route>
+          </Switch>
+        </div>
+        <div className="credits">
+          <Credits />
+        </div>
+      </>
+    );
+  };
+
+  return <div className="App">{renderApp()}</div>;
 }
 
 export default App;
-
-// TODO: chat bot
-// style login page
-// get rid of setting if logged out
-// when logged in, check if data, dont render until data

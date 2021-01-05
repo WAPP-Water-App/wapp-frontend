@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import WAPPRequest from '../../utils';
 import Boop from '../Boop';
+import Spinner from '../Spinner';
 import './profile.css';
 
 export default function Profile() {
@@ -30,21 +31,21 @@ export default function Profile() {
 
   const renderProfile = () => {
     if (loading) {
-      return null;
+      return <Spinner />;
     }
     if (error) {
-      return <div> Error</div>;
-      //TODO:
-      //return a funny image
+      return <div>Error</div>;
     }
 
-    return profile !== '401' ? (
+    return profile !== '401' && localStorage.getItem('WAPPTOKEN') ? (
       <div className="profile-image">
         <h1> {profile.given_name}</h1>
         <img src={profile.picture}></img>
       </div>
     ) : (
-      <div> error</div>
+      <div className="profile-image">
+        <img src="/img/water-drop.png" />
+      </div>
     );
   };
 
@@ -56,10 +57,10 @@ export default function Profile() {
         </Link>
       </Boop>
       <Boop rotation={10} timing={150}>
-      <Link to="/dashboard">
+        <Link to="/dashboard">
           <img className="profile-link" src="img/statistics.png" />
         </Link>
-        </Boop>
+      </Boop>
       <Boop rotation={10} timing={150}>
         <Link to="/settings">
           <img className="profile-link" src="img/settings.png" />
@@ -69,7 +70,6 @@ export default function Profile() {
         <Link to="/logout">
           <img className="profile-link" src="img/exit.png" />
         </Link>
-
       </Boop>
 
       {renderProfile()}

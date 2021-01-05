@@ -6,5 +6,7 @@ export default function Logout() {
   localStorage.removeItem('WAPPTOKEN');
   history.push('/login');
 
+  console.log('local storage removed,', localStorage.getItem('WAPPTOKEN'))
+
   return <div>Loading</div>;
 }

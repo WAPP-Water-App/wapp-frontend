@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import WAPPRequest from '../../utils';
+import Spinner from '../Spinner';
 
 export default function Callback() {
   const location = useLocation();
@@ -38,5 +39,5 @@ export default function Callback() {
     }
   }, []);
 
-  return <div>Loading</div>;
+  return <Spinner />;
 }

@@ -6,8 +6,8 @@
 }
 
 .credits-container img{
-    height: 40px;
-    width: 40px;
+    height: 60px;
+    width: 60px;
 }
 
 .credits-container div{
@@ -16,13 +16,11 @@
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
+  margin: 0 5px;
 }
 
-.credits-container div ul{
-    display: flex;
-    flex-flow: row nowrap;
-    list-style-type: none;
-    justify-content: center;
-  align-items: center;
+.credits-container ul{
+  list-style-type: none;
+
 }
 

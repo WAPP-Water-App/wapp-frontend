@@ -3,7 +3,7 @@ import React from 'react';
 import './streakday.css';
 
 export default function StreakDay({ data }) {
-  const dateString = moment(data.date).tz('UTC').format('DD-dd');
+  const dateString = moment(data.date).tz('UTC').format('dd');
 
   return (
     <>
@@ -18,7 +18,7 @@ export default function StreakDay({ data }) {
           <img src="/img/clear-water-drop.png" />
         </div>
       </div>
-      <div>{data.progress.toFixed(0)}%</div>
+      {/* <div>{data.progress.toFixed(0)}%</div> */}
     </>
   );
 }

@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import WAPPRequest from '../../utils';
 import Display from '../Display';
-import Reminder from '../Reminder';
+import Panel from '../Panel';
 import Schedule from '../Schedule';
+import Settings from '../Settings';
 import './main.css';
 
-export default function Main({ hydroIntake, hydroData, hydroSchedule }) {
+export default function Main({ hydroIntake, hydroData, hydroSchedule, date }) {
   // state variables
   const [progress, setProgress] = useState(0);
   const [disabled, setDisabled] = useState(
@@ -27,27 +29,27 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule }) {
 
       if (response) {
         // set the state progress to progress saved in the db
+
         setProgress(response.progress);
 
         // set status to status saved in the db
         setStatus(response.status);
 
         // calculate which buttons need to be disabled
-
         // if the time has passed, disable the button
         const newDisabled = hydroSchedule.map((time, index) => {
           const scheduledTime = new Date();
-          scheduledTime.setHours(parseInt(time)-1);
+          scheduledTime.setHours(parseInt(time) - 1);
 
           // if the current time is < scheduled time (the time has not passed)
           // return false
-          return new Date().getTime() > scheduledTime.getTime();
+          return (
+            new Date().getTime() > scheduledTime.getTime() ||
+            response.status[index] === 'check'
+          );
         });
 
-        // TODO: filter status array, if not checked and time has passed, mark as "missed" agasdgasdgsa
         setDisabled(newDisabled);
-
-        //asdglkj
       }
 
       setLoading(false);
@@ -65,40 +67,62 @@ export default function Main({ hydroIntake, hydroData, hydroSchedule }) {
     newDisabled[index] = true;
     setDisabled(newDisabled);
 
-    //update completion level for the day
-    const newProgress = progress + 100 / hydroSchedule.length;
-    setProgress(newProgress);
-
     const newStatus = [...status];
     newStatus[index] = 'check';
     setStatus(newStatus);
+
+    //update completion level for the day
+    // const newProgress = progress + 100 / hydroSchedule.length;
+
+    const filterProgress = newStatus.filter((e) => e === "check")
+
+    const calculateProgress = filterProgress.length/newStatus.length;
+
+
+    setProgress(calculateProgress);
 
     // update the progress level in the databse
     const response = await WAPPRequest('/data/daily', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ progress: newProgress, status: newStatus }),
+      body: JSON.stringify({
+        progress: calculateProgress,
+        status: newStatus,
+      }),
     });
   };
 
   return (
     <div className="main-container">
-      {/* <div className="buttons">
-        <ul>{renderSchedule()}</ul>
-      </div> */}
-      <div className="schedule">
-        <Schedule
-          hydroSchedule={hydroSchedule}
-          hydroIntake={hydroIntake}
-          handleClick={handleClick}
-          status={status}
-          disabled={disabled}
-        />
+      <div className="primary">
+        <div className="display">
+          <Display progress={progress} />
+        </div>
+        <div className="schedule">
+          <Schedule
+            hydroSchedule={hydroSchedule}
+            hydroIntake={hydroIntake}
+            handleClick={handleClick}
+            status={status}
+            disabled={disabled}
+          />
+        </div>
       </div>
-      <div className="display">
-        <Display progress={progress} />
+
+      <div className="panel">
+        <Switch>
+          <Route path="/settings">
+            <Settings hydroData={hydroData} />
+          </Route>
+          <Route path="/">
+            <Panel
+              date={date}
+              hydroIntake={hydroIntake}
+              hydroSchedule={hydroSchedule}
+            />
+          </Route>
+        </Switch>
       </div>
-      <div className="empty"></div>
     </div>
   );
 }

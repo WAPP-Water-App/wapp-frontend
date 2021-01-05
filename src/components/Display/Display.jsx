@@ -3,6 +3,7 @@ import { animated, useSpring } from 'react-spring';
 import './display.css';
 
 export default function Display({ progress }) {
+
   const [isBooped, setIsBooped] = useState(false);
 
   const x = 0;
@@ -56,7 +57,7 @@ export default function Display({ progress }) {
       >
         <img src="/img/clear-water-drop.png" />
         <animated.div onMouseEnter={trigger} style={style} className="progress">
-          {progress.toFixed(0)} %
+          {Math.ceil(progress*100)} %
         </animated.div>
       </div>
     </div>

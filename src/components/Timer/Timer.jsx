@@ -61,7 +61,7 @@ export default function Timer({ hydroSchedule }) {
   }, 1000);
 
   const renderTimer = () => {
-    if (timer < 0 || timer > 3600 * 12) {
+    if (timer < 0 || timer > 3600 * 6 || timer === NaN) {
       return (
         <div>
           <img src="/img/panda.png" />

@@ -1,4 +1,4 @@
-const API = 'http://localhost:5000';
+const API = process.env.REACT_APP_WAPP_API;
 
 export default async function WAPPRequest(url, options) {
   // get the code from local storage via the key UWU_TOKEN

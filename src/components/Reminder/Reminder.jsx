@@ -34,7 +34,7 @@ export default function Reminder({
             </span>
           </span>
         </button>
-        <div>
+        <div className="timeline-text">
           <span
             className="timeline-display"
             style={{ color: `${disabled[index] ? '#00000030' : '#000000'}` }}
@@ -42,7 +42,7 @@ export default function Reminder({
             {time <= 12 ? time : time - 12}:00 {time < 12 ? 'am' : 'pm'}
           </span>
 
-          {isShown && <><img src="/img/water-drop.png" /><span>click me</span></>}
+          {isShown && <div className="timeline-hover"><img src="/img/water-drop.png" /></div>}
         </div>
       </li>
     </>

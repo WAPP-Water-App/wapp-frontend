@@ -1,70 +1,145 @@
-# Getting Started with Create React App
+# WApp App Frontend
+WApp is a single page water hydration React app that tracks amount of water consumed to reach your goal based on age, height, and weight. It uses Google OAuth API to login. The data is received and saved in the WApp backend which uses MongoDB. 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## What it includes
 
-## Available Scripts
+* Google OAuth API for authentication
+* Tokens to keep user logged in between pages
 
-In the project directory, you can run:
+### Default Routes
 
-### `npm start`
+| Method | Path | Purpose |
+| ------ | ---------------- | ------------------- |
+| GET | / | Home page |
+| GET | /login | Login page |
+| GET | /settings | Settings Page |
+| GET | /dashboard | Calendar Dashboard Page |
+| GET | /logout | Removes Token and Logs User Out |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### User Stories
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+* As a user, you will be able to log in using your Google account.
+* As a user, you will able set your settings for age, weight, height, start of day, end of day, and notification intensity.
+* As a user, you will able to keep track of your progress for the day based on notification intesity.
+* As a user, you will able to track the last 7 days' progress.
 
-### `npm test`
+### Technologies
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* React
+* Express
+* NodeJS
+* Javascipt
+* HTML
+* CSS
 
-### `npm run build`
+### Code Snippet
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+##### WAPPRequest Function
+```js
+export default async function WAPPRequest(url, options) {
+  // get the code from local storage via the key UWU_TOKEN
+  const userToken = localStorage.getItem('WAPPTOKEN');
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  // send the google_id as a custom header
+  const headers = {
+    ...options.headers,
+    'Content-Type': 'application/json',
+    'X-WAPP-User': userToken,
+  };
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  const response = await fetch(`${API}${url}`, { ...options, headers });
 
-### `npm run eject`
+  if (response.status === 401){
+    return "401"
+  }
+  const contentType = response.headers.get('Content-Type');
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  if (contentType && contentType.includes('application/json')) {
+    return response.json();
+  }
+  return response;
+}
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+##### Reminder Component
+```js
+export default function Reminder({
+  time,
+  amt,
+  amtper,
+  percent,
+  index,
+  handleClick,
+  status,
+  disabled,
+}) {
+  const [isShown, setIsShown] = useState(false);
+  // reminder component
+  return (
+    <>
+      <li key={index}>
+        <button
+          disabled={disabled[index]}
+          className="btn"
+          onClick={() => handleClick(index)}
+          style={{
+            backgroundColor: `#98ddfc${percent}`,
+            width: `${percent}%`,
+          }}
+          onMouseEnter={() => setIsShown(true)}
+          onMouseLeave={() => setIsShown(false)}
+        >
+          <span>
+            <span>
+              {status[index] === 'check' ? '✔DONE!⭐' : amtper.toFixed(2)} /{' '}
+              {amt.toFixed(0)} fl oz
+            </span>
+          </span>
+        </button>
+        <div className="timeline-text">
+          <span
+            className="timeline-display"
+            style={{ color: `${disabled[index] ? '#00000030' : '#000000'}` }}
+          >
+            {time <= 12 ? time : time - 12}:00 {time < 12 ? 'am' : 'pm'}
+          </span>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+          {isShown && <div className="timeline-hover"><img src="/img/water-drop.png" /></div>}
+        </div>
+      </li>
+    </>
+  );
+}
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Steps To Use
 
-## Learn More
+#### 1. Go to repo on Github
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Repo is found here: [wapp-frontend](https://github.com/WAPP-Water-App/wapp-frontend). Alternatively, you can go to this website: [wapp](https://wapp-water.herokuapp.com/)
+* Go to the repo above
+* `fork` and `clone` the repo
+* Also checkout the backend repo found here: [wapp-backend](https://github.com/WAPP-Water-App/wapp-backend)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+#### 2. Install node modules from the package.json
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```
+npm install
+```
 
-### Analyzing the Bundle Size
+(Or just `npm i` for short)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
+#### 3. Add a `.env` file with the following fields:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+* REACT_APP_WAPP_API: What you have the WApp Backend set as
+* PORT: Usually 3000 or 8000 but make it a different port from your backend port.
 
-### Advanced Configuration
+#### 7. Run server; make sure it works
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```
+npm start
+```
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

@@ -3,12 +3,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Callback from './components/Callback';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <Switch>
+        <Route path="/callback">
+          <Callback />
+        </Route>
+        <Route path="/">
+          <App />
+        </Route>
+      </Switch>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

@@ -21,9 +21,10 @@ function App() {
   const [hydroIntake, setHydroIntake] = useState();
   const [hydroSchedule, setHydroSchedule] = useState([]);
   const [hydroSettings, setHydroSettings] = useState();
+  const [reload, setReload] = useState();
   const [date, setDate] = useState();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
   useEffect(() => {
@@ -53,8 +54,6 @@ function App() {
         );
 
         setLoading(false);
-      } else {
-        history.push('/settings');
       }
     };
 
@@ -62,26 +61,20 @@ function App() {
   }, []);
 
   const renderApp = () => {
-    if (loading) {
-      setTimeout(function () {
-        window.location.reload();
-      }, 100);
+    console.log(hydroData, hydroIntake, hydroSchedule);
+    console.log(localStorage.getItem('WAPPTOKEN'))
+    if (!localStorage.getItem('WAPPTOKEN')) {
+      history.push('/login');
     }
 
-    if (error) {
-      return <div>Error</div>;
+    if (loading) {
+      <Spinner />;
     }
 
     return (
       <>
-        <div className="navbar">
-          <Navbar />
-        </div>
         <div className="main">
           <Switch>
-            <Route path="/callback">
-              <Callback />
-            </Route>
             <Route path="/login">
               <Login />
             </Route>
@@ -100,14 +93,25 @@ function App() {
             </Route>
           </Switch>
         </div>
-        <div className="credits">
-          <Credits />
-        </div>
       </>
     );
   };
 
-  return <div className="App">{renderApp()}</div>;
+  return (
+    <div className="App">
+      <div className="navbar">
+        <Navbar />
+      </div>
+      {renderApp()}
+      <div className="credits">
+        <Credits />
+      </div>
+    </div>
+  );
 }
 
 export default App;
+
+// setTimeout(() => {
+//   window.location.reload();
+// }, 1000);

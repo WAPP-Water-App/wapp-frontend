@@ -27,17 +27,16 @@ export default function Callback() {
         // this is their identifier
         // and maintains the session
         localStorage.setItem('WAPPTOKEN', response);
+        // then push them to the main page
+        history.push('/');
       };
 
       login();
-
-      // then push them to the main page
-      history.push('/');
     } else {
       // they did not authorize/we did not get a code back and they need to relogin
       history.push('/login');
     }
   }, []);
 
-  return <Spinner />;
+  return null;
 }

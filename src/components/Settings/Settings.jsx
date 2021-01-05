@@ -134,7 +134,7 @@ export default function Settings({ hydroData }) {
             onChange={(e) => setHeight(parseInt(e.target.value))}
           />
           <div>
-            {(height / 12).toFixed(0)}' {height % 12}"
+            {Math.floor((height / 12))}' {height % 12}"
           </div>
         </div>
         <div className="form-group">

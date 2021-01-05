@@ -65,8 +65,6 @@ export default function Settings() {
       reminder,
     };
 
-    console.log('updated sett', updatedSettings)
-
     const response = await WAPPRequest('/profile/settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -93,7 +91,6 @@ export default function Settings() {
     if (error) {
       return <div>Error</div>;
     }
-    console.log(units);
     return (
       <>
         <div className="settings-title">SETTINGS</div>

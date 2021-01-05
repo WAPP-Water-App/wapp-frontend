@@ -5,6 +5,7 @@ import Timer from '../Timer';
 import './panel.css';
 
 export default function Panel({ date, hydroIntake, hydroSchedule }) {
+
   return (
     <div className="panel-container">
       <div className="panel-card">
@@ -28,7 +29,7 @@ export default function Panel({ date, hydroIntake, hydroSchedule }) {
             <img src="/img/target.png" />
           </Boop>
           <span>
-            {hydroIntake} fl oz / {(hydroIntake / 8).toFixed(2)} cups
+            {hydroIntake? hydroIntake: 0} fl oz / {(hydroIntake? hydroIntake: 0 / 8).toFixed(2)} cups
           </span>
         </div>
       </div>

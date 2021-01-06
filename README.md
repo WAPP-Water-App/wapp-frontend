@@ -149,7 +149,7 @@ npm install
 * REACT_APP_WAPP_API: What you have the WApp Backend set as
 * PORT: Usually 3000 or 8000 but make it a different port from your backend port.
 
-#### 7. Run server; make sure it works
+#### 4. Run server; make sure it works
 
 ```
 npm start

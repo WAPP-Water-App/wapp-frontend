@@ -1,20 +1,43 @@
-# WApp App Frontend
-WApp is a single page water hydration React app that tracks amount of water consumed to reach your goal based on age, height, and weight. It uses Google OAuth API to login. The data is received and saved in the WApp backend which uses MongoDB. 
+# WAPP - Water App API 💧
 
-## What it includes
+## Hydration Life Coach
+Test it out at 👉 [https://wapp-water.herokuapp.com/](https://wapp-water.herokuapp.com/).
+WAPP is a single page water hydration React app that tracks, calculates, schedules, and manages your water consumption based on your unique profile.
+
+# SCREENSHOTS
+
+## Web App
+##### Login, Authorization, Home Page
+![Authorization](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/auth.gif)
+
+##### Uploading an Emoji
+![Upload](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/upload.gif)
+
+##### Browsing + Adding an Emoji
+![Browse](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/browse.gif)
+
+##### Editing an Emoji
+![Edit](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/edit.gif)
+
+##### Deleting an Emoji
+![Delete](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/delete.gif)
+
+
+## Discord
+
+##### Discord bot adding emojis
+![Delete](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/discord-upload.png)
+
+##### Discord bot updating emojis
+![Delete](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/discord-update.png)
+
+## APIs
+> - 🎨 [Google OAuth](https://console.developers.google.com/)
+
+### What it includes
 
 * Google OAuth API for authentication
 * Tokens to keep user logged in between pages
-
-### Default Routes
-
-| Method | Path | Purpose |
-| ------ | ---------------- | ------------------- |
-| GET | / | Home page |
-| GET | /login | Login page |
-| GET | /settings | Settings Page |
-| GET | /dashboard | Calendar Dashboard Page |
-| GET | /logout | Removes Token and Logs User Out |
 
 ### User Stories
 

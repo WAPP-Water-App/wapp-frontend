@@ -24,7 +24,7 @@ export default function Settings() {
       }).catch((error) => console.log(error));
 
       if (response) {
-        console.log('settings response', response);
+
         setAge(Object.keys(response).length ? response.settings.age : 25);
         setWeight(
           Object.keys(response).length ? response.settings.weight : 150

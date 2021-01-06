@@ -76,6 +76,3 @@ export default function Profile() {
     </div>
   );
 }
-
-//TODO: login + logout pages
-// TOOD: login logic

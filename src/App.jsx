@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Logout from './components/Logout';
 import Main from './components/Main';
 import Navbar from './components/Navbar';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import Spinner from './components/Spinner';
 import WAPPRequest from './utils';
 
@@ -16,6 +17,10 @@ function App() {
   // all it does is hold the primary components (navbar, main, panel)
   // only the main div element changes with different routes
   const history = useHistory();
+
+  // if (!localStorage.getItem('WAPPTOKEN')) {
+  //   history.push('/login');
+  // }
 
   const [hydroData, setHydroData] = useState();
   const [hydroIntake, setHydroIntake] = useState();
@@ -61,12 +66,6 @@ function App() {
   }, []);
 
   const renderApp = () => {
-    console.log(hydroData, hydroIntake, hydroSchedule);
-    console.log(localStorage.getItem('WAPPTOKEN'))
-    if (!localStorage.getItem('WAPPTOKEN')) {
-      history.push('/login');
-    }
-
     if (loading) {
       <Spinner />;
     }
@@ -81,16 +80,16 @@ function App() {
             <Route path="/logout">
               <Logout />
             </Route>
-            <Route path="/dashboard">
+            <PrivateRoute path="/dashboard">
               <Dashboard />
-            </Route>
-            <Route path="/">
+            </PrivateRoute>
+            <PrivateRoute path="/">
               <Main
                 hydroIntake={hydroIntake}
                 hydroSchedule={hydroSchedule}
                 date={date}
               />
-            </Route>
+            </PrivateRoute>
           </Switch>
         </div>
       </>

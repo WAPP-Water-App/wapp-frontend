@@ -37,7 +37,7 @@ export default function Profile() {
       return <div>Error</div>;
     }
 
-    return profile !== '401' && localStorage.getItem('WAPPTOKEN') ? (
+    return profile !== '401' ? (
       <div className="profile-image">
         <h1> {profile.given_name}</h1>
         <img src={profile.picture}></img>

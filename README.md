@@ -1,4 +1,4 @@
-# WAPP - Water App API 💧
+# WAPP - Water App 💧
 
 ## Hydration Life Coach
 Test it out at 👉 [https://wapp-water.herokuapp.com/](https://wapp-water.herokuapp.com/).

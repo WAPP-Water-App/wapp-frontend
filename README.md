@@ -6,30 +6,20 @@ WAPP is a single page water hydration React app that tracks, calculates, schedul
 
 # SCREENSHOTS
 
-## Web App
-##### Login, Authorization, Home Page
-![Authorization](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/auth.gif)
+##### Main Page
+![Main](https://github.com/WAPP-Water-App/wapp-frontend/blob/main/public/ss/wapp-main.gif)
 
-##### Uploading an Emoji
-![Upload](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/upload.gif)
+##### Settings
+![Settings](https://github.com/WAPP-Water-App/wapp-frontend/blob/main/public/ss/wapp-sett.gif)
 
-##### Browsing + Adding an Emoji
-![Browse](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/browse.gif)
+##### Dashboard
+![Dashboard](https://github.com/WAPP-Water-App/wapp-frontend/blob/main/public/ss/wapp-dash.gif)
 
-##### Editing an Emoji
-![Edit](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/edit.gif)
+##### Session/Route Protection
+![Route](https://github.com/WAPP-Water-App/wapp-frontend/blob/main/public/ss/wapp-session.gif)
 
-##### Deleting an Emoji
-![Delete](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/delete.gif)
-
-
-## Discord
-
-##### Discord bot adding emojis
-![Delete](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/discord-upload.png)
-
-##### Discord bot updating emojis
-![Delete](https://github.com/ruvvet/discord-emoji-app/blob/main/public/img/ss/discord-update.png)
+##### Logout
+![Logout](https://github.com/WAPP-Water-App/wapp-frontend/blob/main/public/ss/wapp-logout.gif)
 
 ## APIs
 > - 🎨 [Google OAuth](https://console.developers.google.com/)
